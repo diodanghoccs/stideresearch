@@ -1,0 +1,19 @@
+{
+  "check": "TUAN-01",
+  "execution": "live-provider",
+  "status": "NOT_RUN",
+  "recordedAt": "2026-10-22T09:21:03.893Z",
+  "fixture": {
+    "id": "synthetic-water-study-A-v1",
+    "sourceRecordId": "A",
+    "sha256": "60de9a8b36c6736b526fdfe5cc8516c21b8299a514a4fdf6f45a034568b30c4c"
+  },
+  "runId": "c2-tuan-d6e39d53-3d96-4a39-a849-bd20925b09a9",
+  "result": {
+    "outcome": "not-ready",
+    "operation": "summarize",
+    "module": "inference",
+    "code": "INTEGRATION_NOT_READY",
+    "cause": "INFERENCE_PROVIDER, INFERENCE_MODEL and INFERENCE_API_KEY are required on the server."
+  }
+}

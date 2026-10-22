@@ -1,0 +1,11 @@
+{
+  "check": "TUAN-local-adapter-and-handler",
+  "execution": "simulated-ports",
+  "realProviderCalled": false,
+  "realTideAuthenticationVerified": false,
+  "status": "PASS",
+  "recordedAt": "2026-10-22T09:31:36.638Z",
+  "tests": 35,
+  "passed": 35,
+  "failed": 0
+}
