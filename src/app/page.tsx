@@ -1,10 +1,11 @@
 import { StatusPanel } from "./status-panel";
+import { Workflow } from "./workflow/workflow";
 
 const FLOW = [
-  { step: "A", title: "Source dataset A", text: "Encrypted research notes. Only the AI-reader principal is granted A (B is denied)." },
-  { step: "Draft", title: "AI-reader drafts", text: "The AI-reader decrypts A through Tide and a real model writes a draft brief." },
-  { step: "Review", title: "Lan reviews", text: "The owner reviews the draft in the app before anything is shared." },
-  { step: "S", title: "Encrypted brief S", text: "Lan encrypts S into Minh's channel. Minh can open it; Y is denied by Tide." },
+  { step: "A / B", title: "Lan's source datasets", text: "Lan owns both encrypted datasets. The AI-reader is granted A only; B is refused by Tide." },
+  { step: "Draft", title: "AI-reader drafts", text: "The AI-reader decrypts A in its own session and a real model writes a draft brief." },
+  { step: "Review", title: "Lan reviews", text: "Lan imports the draft, edits it, and decides what is shared." },
+  { step: "S", title: "Encrypted brief S", text: "Lan encrypts S into Minh's channel. Minh can open it; Y is refused by Tide." },
 ];
 
 export default function Home() {
@@ -18,7 +19,8 @@ export default function Home() {
           encrypted channel for one collaborator. TideCloak enforces who can decrypt each record.
         </p>
         <p className="notice" role="note">
-          Base scaffold: Tide and AI are not connected yet. Nothing on this page is protected by Tide.
+          Prototype in progress: the status panel below shows which integrations are live right now. Nothing is shown as
+          working unless Tide or the AI actually returned it.
         </p>
       </header>
 
@@ -38,6 +40,7 @@ export default function Home() {
       </section>
 
       <StatusPanel />
+      <Workflow />
     </main>
   );
 }

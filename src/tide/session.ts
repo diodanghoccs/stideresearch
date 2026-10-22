@@ -1,9 +1,22 @@
 // Browser/session Tide boundary. Owner after base: Trí.
-// Real implementation wraps @tidecloak/nextjs (TideCloakProvider / useTideCloak) once
-// data/tidecloak.json exists. Until then nothing here pretends to log in, encrypt or decrypt.
-import type { EncryptedRecord, ModuleReadiness, OperationResult, SessionIdentity, TideSessionPort } from "@/contracts";
+// Real implementation wraps @tidecloak/nextjs (TideCloakProvider / useTideCloak) and the pack's
+// relationship.ts helper once data/tidecloak.json exists. Until then nothing here pretends to log in,
+// sign, encrypt or decrypt. (Stub signatures updated by Triệu for the contracts change of 22/10.)
+import type {
+  EncryptedRecord,
+  ModuleReadiness,
+  OperationResult,
+  PolicyRequest,
+  SessionIdentity,
+  SignedPolicy,
+  TideSessionPort,
+} from "@/contracts";
 
-const REASON = "Tide session adapter not implemented in base (SDK provider not wired, owner: Trí).";
+const REASON = "Tide session adapter not implemented (SDK provider not wired, owner: Trí).";
+
+function notReady<T>(operation: string, detail = REASON): OperationResult<T> {
+  return { outcome: "not-ready", operation, module: "tide", code: "INTEGRATION_NOT_READY", cause: detail };
+}
 
 export const unconfiguredTideSession: TideSessionPort = {
   readiness(): ModuleReadiness {
@@ -12,17 +25,18 @@ export const unconfiguredTideSession: TideSessionPort = {
   async getSession(): Promise<SessionIdentity> {
     return { status: "not-configured", reason: REASON };
   },
-  async encrypt(_input: { assignmentId: string; plaintext: string }): Promise<OperationResult<EncryptedRecord>> {
-    // Never echo the plaintext back as "ciphertext".
-    return { outcome: "not-ready", operation: "encrypt", module: "tide", code: "INTEGRATION_NOT_READY", cause: REASON };
+  async authFetch(_url: string, _init?: RequestInit): Promise<OperationResult<Response>> {
+    // No session: never send the request.
+    return notReady("auth-fetch");
   },
-  async decrypt(input: { record: EncryptedRecord }): Promise<OperationResult<{ recordId: string; plaintext: string }>> {
-    return {
-      outcome: "not-ready",
-      operation: "decrypt",
-      module: "tide",
-      code: "INTEGRATION_NOT_READY",
-      cause: `${REASON} (record ${input.record.recordId})`,
-    };
+  async signPolicy(_input: PolicyRequest): Promise<OperationResult<SignedPolicy>> {
+    return notReady("sign-policy");
+  },
+  async encrypt(_input: { assignmentId: string; plaintext: string; policy: SignedPolicy }): Promise<OperationResult<EncryptedRecord>> {
+    // Never echo the plaintext back as "ciphertext".
+    return notReady("encrypt");
+  },
+  async decrypt(input: { record: EncryptedRecord; policy: SignedPolicy }): Promise<OperationResult<{ recordId: string; plaintext: string }>> {
+    return notReady("decrypt", `${REASON} (record ${input.record.recordId})`);
   },
 };
