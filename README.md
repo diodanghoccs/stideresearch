@@ -33,7 +33,7 @@ Only rows marked **verified** were observed running. Everything else is built bu
 | Policy signing, encrypt/decrypt, ORK allow/deny (A allowed / B refused, Minh allowed / Y refused) | Not run; code in `src/tide/` |
 | AI draft from a real model | Not run; adapter in `src/inference/` needs a model and key on the server |
 
-Demo video: `demo.mp4` in the repository root shows only the parts above that ran.
+Demo video: [demo.mp4](demo.mp4) (2 min 4 s, 6.95 MB), recorded on 22 October 2026, shows the Plan C **SIMULATED** workflow. Sign-in, roles and access checks in this recording are simulated.
 
 ## Plan C: simulated mode (official UNLOCKED fallback)
 
