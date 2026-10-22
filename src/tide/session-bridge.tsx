@@ -17,13 +17,20 @@ function describe(err: unknown): string {
   return causeText ? `${err.message} — cause: ${causeText}` : err.message;
 }
 
-/** The pack documents that a contract refusal surfaces as a threshold failure carrying the ORK cause. */
+/**
+ * The pack documents that a contract refusal surfaces as a threshold failure carrying the ORK cause.
+ * A bare THRESHOLD_FAILURE is also what a network/ORK outage looks like, so it is NOT a deny on its
+ * own: only a recognised contract cause makes it `denied`; everything else stays an error.
+ */
+const CONTRACT_DENY_CAUSE = /subjectId does not match|not found in doken|Tags do not contain|not found in list of roles|role not found/i;
+
 function fromTideError<T>(operation: string, err: unknown, recordId?: string): OperationResult<T> {
   const text = describe(err);
-  if (/THRESHOLD_FAILURE|subjectId does not match|not found in doken|Tags do not contain|not found in list of roles|role not found/i.test(text)) {
+  if (CONTRACT_DENY_CAUSE.test(text)) {
     return { outcome: "denied", operation, cause: text, recordId };
   }
-  return { outcome: "error", operation, code: "UPSTREAM_ERROR", cause: text, recordId };
+  const cause = /THRESHOLD_FAILURE/i.test(text) ? `${text} (no contract cause: not concluded as a deny)` : text;
+  return { outcome: "error", operation, code: "UPSTREAM_ERROR", cause, recordId };
 }
 
 function notSignedIn<T>(operation: string): OperationResult<T> {
