@@ -12,7 +12,8 @@
     "start": "next start",
     "typecheck": "tsc --noEmit",
     "check:storage": "node checks/storage-boundary.check.mts",
-    "check:smoke": "node checks/base-smoke.mjs"
+    "check:smoke": "node checks/base-smoke.mjs",
+    "check:gate": "node checks/integration-gate.check.mjs"
   },
   "dependencies": {
     "@tidecloak/nextjs": "0.14.40",
