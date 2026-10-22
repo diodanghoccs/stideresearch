@@ -1,0 +1,12 @@
+node_modules/
+.next/
+out/
+next-env.d.ts
+*.tsbuildinfo
+npm-debug.log*
+
+# secrets / local config
+.env
+.env.*
+!.env.example
+data/tidecloak.json
