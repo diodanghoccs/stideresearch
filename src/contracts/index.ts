@@ -39,7 +39,8 @@ export type SessionIdentity =
       roles?: string[];
       /** The user's public key (`tideuserkey` claim): what a User policy names. Public, safe to show. */
       tideUserKey?: string;
-      verifiedBy: "tide";
+      /** "simulated" only in Plan C mode (NEXT_PUBLIC_TIDE_MODE=simulated); never mixed with real tokens. */
+      verifiedBy: "tide" | "simulated";
     };
 
 /** Stored record. Holds no plaintext and no private key. */

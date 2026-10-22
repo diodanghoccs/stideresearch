@@ -11,6 +11,8 @@ import type {
   SignedPolicy,
 } from "@/contracts";
 import { apiJson, useTideSession } from "./session-context";
+import { useSimulatedIdentity } from "@/tide/simulated-session";
+import { SIM_USERS, type SimAlias } from "@/tide/simulated-users";
 
 const REC = { A: "rec-A", B: "rec-B", S: "rec-S" } as const;
 const RECORDS = [REC.A, REC.B, REC.S];
@@ -34,6 +36,26 @@ function ResultLine<T>({ view, ok }: { view: View<T>; ok?: (value: T) => ReactNo
   }
 }
 
+function SimulatedSwitcher() {
+  const sim = useSimulatedIdentity();
+  if (!sim) return null;
+  return (
+    <div className="sim-banner" role="note">
+      <strong>SIMULATED MODE (Tide Plan C).</strong> Tide&apos;s network is overloaded, so sign-in, roles and the ORK access
+      checks below are simulated in the browser and server. Nothing here is a real Tide token or real encryption.
+      <div className="row">
+        <span>Act as:</span>
+        {(Object.keys(SIM_USERS) as SimAlias[]).map((a) => (
+          <button key={a} type="button" onClick={() => sim.setAlias(a)} aria-pressed={sim.alias === a} className={sim.alias === a ? "active" : ""}>
+            {SIM_USERS[a].name}
+          </button>
+        ))}
+        {sim.alias && <button type="button" onClick={() => sim.setAlias(null)}>Sign out</button>}
+      </div>
+    </div>
+  );
+}
+
 function SessionBadge({ session }: { session: SessionIdentity | null }) {
   const port = useTideSession();
   if (!session) return <p className="muted" role="status">Checking Tide session…</p>;
@@ -50,7 +72,7 @@ function SessionBadge({ session }: { session: SessionIdentity | null }) {
     <div className="session">
       <div className="row">
         <p className="ok">
-          Signed in with Tide: <code>{session.displayName ?? session.principalId}</code>
+          Signed in{session.verifiedBy === "simulated" ? " (SIMULATED identity)" : " with Tide"}: <code>{session.displayName ?? session.principalId}</code>
           {session.demoAlias && <span className="badge s-ready"> {session.demoAlias}</span>}
         </p>
         {port.logout && <button type="button" onClick={() => void port.logout?.()}>Sign out</button>}
@@ -286,9 +308,9 @@ function PublishStep() {
       <label>Import draft JSON <input type="file" accept="application/json,.json" onChange={(e) => void importFile(e.target.files?.[0])} /></label>
       {importError && <p className="err" role="alert">{importError}</p>}
       {draft && <p className="muted">Draft run <code>{draft.runId}</code> from <code>{draft.sourceRecordId}</code> ({draft.provider}/{draft.model}). Edit before publishing.</p>}
-      <textarea rows={5} value={text} onChange={(e) => setText(e.target.value)} placeholder="Reviewed brief S (plaintext stays in this browser; only ciphertext is stored)" disabled={!draft} />
+      <textarea rows={5} value={text} onChange={(e) => setText(e.target.value)} placeholder="Reviewed brief S (plaintext stays in this browser; only ciphertext is stored)" />
       <PolicyPicker recordId={REC.S} value={policy} onChange={setPolicy} />
-      <button type="button" onClick={async () => { setView({ kind: "loading" }); setView({ kind: "done", result: await encryptAndStore(REC.S, text, policy) }); }} disabled={!draft || view.kind === "loading"}>
+      <button type="button" onClick={async () => { setView({ kind: "loading" }); setView({ kind: "done", result: await encryptAndStore(REC.S, text, policy) }); }} disabled={!text.trim() || view.kind === "loading"}>
         Encrypt &amp; publish S
       </button>
       <ResultLine view={view} ok={(r) => `Published ${r.recordId} as ciphertext (v${r.version}).`} />
@@ -331,6 +353,7 @@ export function Workflow() {
   return (
     <section aria-labelledby="wf-h">
       <h2 id="wf-h">Run the workflow</h2>
+      <SimulatedSwitcher />
       <SessionBadge session={identity} />
       <p className="muted small">One app for every role: open it in a separate browser profile per Tide account. Results below are whatever Tide and the server actually return.</p>
       <GrantStep />

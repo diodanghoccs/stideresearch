@@ -35,6 +35,16 @@ Only rows marked **verified** were observed running. Everything else is built bu
 
 Demo video: `demo.mp4` in the repository root shows only the parts above that ran.
 
+## Plan C: simulated mode (official UNLOCKED fallback)
+
+The organisers' Plan C allows simulating TideCloak's sign-in, roles and access checks when Tide's network is overloaded (our token request returned 502 at ~17:40). The app has a **simulated mode**, off by default, that keeps the same UI, API routes and contracts and swaps only the Tide layer:
+
+- `src/tide/simulated-session.tsx`: identities Lan / AI-reader / Minh / Y chosen in a **SIMULATED** banner; it simulates the checks `RelationshipAttestation:1` makes on the ORKs (subject, `_tide_encryptor` / `_tide_decryptor`, policy access, record tag). "Ciphertext" is labelled `SIMULATED-CIPHERTEXT` and is **not** encryption.
+- `src/tide/server.ts` `simulatedVerifier`: the API trusts an `X-Simulated-User` header **only in this mode** and applies the same role rules; the real JWT + DPoP verifier is unchanged and used otherwise.
+- Every simulated result says SIMULATED in the UI and API. The real Tide code (`relationship.ts`, `session-bridge.tsx`, `verify-dpop.ts`) is what runs when the mode is off.
+
+Run it (no TideCloak needed): put `NEXT_PUBLIC_TIDE_MODE=simulated` in `.env.local`, then `npm run build` and `npm run start -- -p 3000`. Observed in simulated mode on 22/10 17:53: Lan grants 5 policies and encrypts A/B; the AI-reader opens A and is refused B (`subjectId does not match`); Lan publishes S; Minh opens S; Y is refused S; Y storing a policy gets 403. The AI draft step still needs a real model key.
+
 ## Run it
 
 Requires Node.js ≥ 22.18, npm, and a TideCloak realm on the same machine.
