@@ -1,5 +1,6 @@
 import { StatusPanel } from "./status-panel";
 import { Workflow } from "./workflow/workflow";
+import { SIMULATED_MODE } from "@/tide/simulated-users";
 
 const FLOW = [
   { step: "A / B", title: "Lan's source datasets", text: "Lan owns both encrypted datasets. The AI-reader is granted A only; B is refused by Tide." },
@@ -18,10 +19,18 @@ export default function Home() {
           An AI research assistant whose reader only decrypts the dataset it was granted, then shares the brief in an
           encrypted channel for one collaborator. TideCloak enforces who can decrypt each record.
         </p>
-        <p className="notice" role="note">
-          Prototype in progress: the status panel below shows which integrations are live right now. Nothing is shown as
-          working unless Tide or the AI actually returned it.
-        </p>
+        {SIMULATED_MODE ? (
+          <p className="notice" role="note">
+            <strong>SIMULATED MODE (Tide Plan C):</strong> Tide&apos;s network is overloaded, so TideCloak sign-in, roles and
+            the ORK access checks are simulated, as the organisers allow. The real TideCloak integration is in the code and
+            runs when this mode is off.
+          </p>
+        ) : (
+          <p className="notice" role="note">
+            Prototype in progress: the status panel below shows which integrations are live right now. Nothing is shown as
+            working unless Tide or the AI actually returned it.
+          </p>
+        )}
       </header>
 
       <section aria-labelledby="flow-h">

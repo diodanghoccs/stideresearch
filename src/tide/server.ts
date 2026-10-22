@@ -7,6 +7,7 @@ import { join } from "path";
 import { createLocalJWKSet, jwtVerify, type JWTPayload } from "jose";
 import type { GuardedOperation, ModuleReadiness, OperationResult, SessionIdentity, TideRequestVerifier } from "@/contracts";
 import { verifyDpop } from "./verify-dpop";
+import { SIM_USERS, SIMULATED_MODE, isSimAlias } from "./simulated-users";
 
 interface AdapterConfig {
   realm: string;
@@ -104,6 +105,43 @@ export const tideVerifier: TideRequestVerifier = {
   },
 };
 
+// Plan C: simulated verifier, used ONLY when NEXT_PUBLIC_TIDE_MODE=simulated. It trusts the
+// X-Simulated-User header and says so; it never accepts or parses a real Tide token.
+const simRolesBySession = new WeakMap<object, string[]>();
+
+export const simulatedVerifier: TideRequestVerifier = {
+  readiness(): ModuleReadiness {
+    return {
+      module: "tide",
+      state: "ready",
+      implementation: "SIMULATED-verifier (Plan C)",
+      detail: "SIMULATED: Tide sign-in, roles and access checks are simulated (Plan C); no Tide token is verified in this mode.",
+    };
+  },
+  async verify(request: Request): Promise<SessionIdentity> {
+    const alias = request.headers.get("x-simulated-user");
+    if (!isSimAlias(alias)) return { status: "unauthenticated" };
+    const session: SessionIdentity = {
+      status: "authenticated",
+      principalId: `sim-${alias}`,
+      displayName: `${SIM_USERS[alias].name} (SIMULATED)`,
+      roles: SIM_USERS[alias].roles,
+      verifiedBy: "simulated",
+    };
+    simRolesBySession.set(session, SIM_USERS[alias].roles);
+    return session;
+  },
+  async authorize(session: SessionIdentity, operation: GuardedOperation): Promise<OperationResult<void>> {
+    const roles = simRolesBySession.get(session);
+    if (session.status !== "authenticated" || !roles) {
+      return { outcome: "error", operation, code: "UNAUTHENTICATED", cause: "No simulated session." };
+    }
+    const role = REQUIRED_ROLE[operation];
+    if (role && !roles.includes(role)) return { outcome: "denied", operation, cause: `SIMULATED: requires role ${role}.` };
+    return { outcome: "allowed", value: undefined };
+  },
+};
+
 export function getTideVerifier(): TideRequestVerifier {
-  return tideVerifier;
+  return SIMULATED_MODE ? simulatedVerifier : tideVerifier;
 }
