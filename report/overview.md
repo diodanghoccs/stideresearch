@@ -13,4 +13,4 @@ Small research teams and NGOs could get AI drafts from one dataset without expos
 Every person, and the AI-reader, signs in with Tide; the API verifies Tide tokens and DPoP proofs. Records are designed to be encrypted under RelationshipAttestation policies (one subject × one record) approved by an admin in the Tide enclave, so Tide's ORK network checks the caller on every decrypt and no app server holds a key.
 
 ### Prototype & storytelling
-Running today: a licensed Tide realm with governance (IGA), Tide sign-in issuing tokens to the app, and an API that rejects missing or forged tokens. The policy, encryption and AI-draft code is in the repo but has not yet run against the network; the status table lists what ran.
+Running today: a licensed Tide realm with governance (IGA), Tide sign-in wired into the app, and an API that rejects missing or forged tokens. The policy, encryption and AI-draft code is in the repo but has not yet run against the network; the status table lists what ran.

@@ -17,16 +17,16 @@ Small research teams and NGOs could get AI drafts from one dataset without expos
 Every person, and the AI-reader, signs in with Tide; the API verifies Tide tokens and DPoP proofs. Records are designed to be encrypted under RelationshipAttestation policies (one subject × one record) approved by an admin in the Tide enclave, so Tide's ORK network checks the caller on every decrypt and no app server holds a key.
 
 ### Prototype & storytelling
-Running today: a licensed Tide realm with governance (IGA), Tide sign-in issuing tokens to the app, and an API that rejects missing or forged tokens. The policy, encryption and AI-draft code is in the repo but has not yet run against the network; the status table lists what ran.
+Running today: a licensed Tide realm with governance (IGA), Tide sign-in wired into the app, and an API that rejects missing or forged tokens. The policy, encryption and AI-draft code is in the repo but has not yet run against the network; the status table lists what ran.
 
 ## Prototype status
 
 Only rows marked **verified** were observed running. Everything else is built but not claimed. Details and evidence: `docs/tide-setup.md`, `checks/verification/`.
 
-| Part | Status (22/10/2026 17:10, UTC+7) |
+| Part | Status (22/10/2026 17:45, UTC+7) |
 |---|---|
 | Tide realm `stideresearch`: licence, IGA (`iga.attestor=tide`), admin linked | **Verified** on the integration machine (15:53–16:04) |
-| Sign-in with Tide from the app | Partial: TideCloak issued a token to the app's client for the admin (Lan) at 16:14; no app-side capture |
+| Sign-in with Tide from the app | **Not completed.** The sign-in starts from the app, but at ~17:40 the token request to TideCloak (`/realms/stideresearch/protocol/openid-connect/token`) returned **502 Bad Gateway**, so no app session was established. The organisers report Tide's network is under heavy load. Earlier (16:14) TideCloak did issue a token to the app's client for the admin (Lan); no app-side capture |
 | Protected API rejects a missing token, a fake Bearer token and an `alg:none` JWT | **Verified**: 9/9 routes answered 401 (`checks/integration-gate.check.mjs`, 16:48) |
 | API accepting a real token + DPoP proof; role checks with a real session | Not run |
 | Tide accounts for AI-reader, Minh and Y | Not created (1 of 4 identities) |
