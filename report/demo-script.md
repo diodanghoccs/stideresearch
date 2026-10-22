@@ -1,27 +1,24 @@
-# Demo video script — 120 s (`demo.mp4`, < 100 MB)
+# Demo video script — 120 s, real parts only (`demo.mp4`, < 100 MB)
 
-Owner: Triệu. Record **only what actually ran**. Cut waiting/login time, never stage a result. If the team switched to S1 (no AI-reader), use the S1 variant at the end and say so on screen.
+Owner: Triệu. Recorded on Trí's machine (the only machine with the realm). Show **only what actually runs**; for everything else, show the code and say "designed" or "not yet run". No simulation, no staged results.
 
 ## Before recording (checklist)
 
-- [ ] Tide realm up on the integration machine (Trí), app opened at the same origin the realm client allows.
-- [ ] Four Tide accounts, each in its **own browser profile**: Lan (admin), AI-reader, Minh, Y.
-- [ ] Policies signed in step 1: A→Lan rw, B→Lan rw, A→AI-reader read, S→Lan write, S→Minh read (no B→AI-reader, no S→Y).
-- [ ] Synthetic A/B text from Triết's fixtures encrypted in step 2.
-- [ ] Inference configured (Tuấn) — otherwise the AI step shows "Not run" and must be described as such.
-- [ ] Nothing secret on screen: no raw JWT, invite link, admin password, API key, `data/tidecloak.json`.
-- [ ] Screen recorder at 1080p, ~30 fps; check the file stays under 100 MB.
+- [ ] TideCloak running (`docker ps` shows `tidecloak`), app started with `npm run start -- -p 3000`, opened at `http://localhost:3000`.
+- [ ] Signed out at the start, so the Tide sign-in is visible.
+- [ ] Optional: if `INFERENCE_*` is configured and one real summarize call succeeded, you may show the AI step; otherwise do not show it as working.
+- [ ] Nothing secret on screen: no token, invite link, admin password, API key, `.env.local` or `data/tidecloak.json` content.
+- [ ] Screen recorder (Xbox Game Bar: Win+Alt+R, or OBS), 1080p; check the file is under 100 MB before committing.
 
 ## Shot list
 
 | Time | Screen | Voice-over (EN) |
 |---|---|---|
-| 0–15 s | Home page header + workflow A→draft→S | "Research teams want AI to summarise their data, but giving an AI tool access usually means giving it everything. STideResearch lets an AI read only what it was granted, and share the result with one collaborator." |
-| 15–45 s | AI-reader profile: step 3 → Decrypt A (allowed) → Try to decrypt B (denied, show Tide's cause) | "This is the AI-reader's own Tide identity. It can decrypt dataset A. When it tries dataset B, the Tide network refuses — the server never had a key to leak." |
-| 45–75 s | Summarize A → draft shown → Download JSON; Lan profile: step 4 import, edit, Encrypt & publish S | "A real model drafts the brief from A only. Lan reviews and edits it, then encrypts it into Minh's channel. Only ciphertext is stored." |
-| 75–100 s | Minh profile: step 5 Open S (allowed). Y profile: same ciphertext + Minh's policy → denied | "Minh opens the brief. Y has the same ciphertext and the same policy, and is still refused, because Tide checks who is asking on every decryption." |
-| 100–120 s | Status panel + short text card of limits | "TideCloak enforces who can decrypt each record across its network. Limits today: demo data, in-memory storage, Lan is also the admin who grants access." |
+| 0–20 s | Home page header and workflow A→draft→S | "Research teams want AI to summarise their data, but an AI tool usually gets access to everything. STideResearch gives the AI its own identity and a grant for one dataset, and shares the reviewed brief with one collaborator." |
+| 20–35 s | Status table in README or the app's status panel | "Today, trust sits with whoever runs the server. We want decryption decided per record by Tide's network, so the server only ever stores ciphertext." |
+| 35–60 s | "Sign in with Tide" → Tide login → back in the app signed in; then `/tide` showing the claims (roles, user key present) | "This is a real TideCloak realm with Tide's governance switched on. The admin, Lan, signs in with Tide; the app reads her identity from a Tide-issued token." |
+| 60–80 s | Terminal: `BASE_URL=http://localhost:3000 npm run check:gate` → 401 results | "Every protected route verifies the Tide token and its DPoP proof on the server. Missing or forged tokens, even an unsigned JWT claiming admin roles, are rejected." |
+| 80–105 s | Editor: `src/tide/relationship.ts` and `src/tide/session-bridge.tsx` (encrypt/decrypt with a policy), workflow steps on the page | "Records are designed to be encrypted under RelationshipAttestation policies, one subject per record, approved by an admin in the Tide enclave. The AI-reader would get A but not B; Minh would open the brief and Y would not. This part is built but not yet run against the network." |
+| 105–120 s | README "Limits" | "What changes: an AI and a collaborator can be given exactly one record, without trusting the app server. Limits today: synthetic data, in-memory storage, and Lan is also the only admin." |
 
-## Variant S1 (only if the AI-reader gate failed and Triệu chose S1)
-
-Drop the 15–45 s AI-reader shots. Either Lan drafts with AI in her own session (say that the model sees what Lan sends, Tide does not restrict the model) or the brief is hand-written (say so). Keep the Minh/Y shots.
+If a later run proves more (for example Lan's encrypt/decrypt round-trip or Y being refused by the network), replace the 80–105 s shot with that real result and update the README status table at the same time.
