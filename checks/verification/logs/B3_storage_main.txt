@@ -1,0 +1,19 @@
+# 2026-10-22T16:47:40+07:00 main@aa9fe00
+
+> stideresearch@0.1.0 check:storage
+> node checks/storage-boundary.check.mts
+
+(node:28176) [MODULE_TYPELESS_PACKAGE_JSON] Warning: Module type of file:///D:/COMP/KAGGLE/RMIT%20HACKATHON%202026/Challenge%202/stideresearch-triet/src/storage/memory-store.ts is not specified and it doesn't parse as CommonJS.
+Reparsing as ES module because module syntax was detected. This incurs a performance overhead.
+To eliminate this warning, add "type": "module" to D:\COMP\KAGGLE\RMIT HACKATHON 2026\Challenge 2\stideresearch-triet\package.json.
+(Use `node --trace-warnings ...` to show where the warning was created)
+PASS readiness says in-memory and not persistent
+PASS rejects envelope with extra field "plaintext"
+PASS rejects envelope with extra field "text"
+PASS rejects envelope with extra field "content"
+PASS rejects envelope with extra field "privateKey"
+PASS rejects empty ciphertext / bad version / non-object
+PASS stores and returns only envelope fields
+PASS missing record is NOT_FOUND, not denied
+storage-boundary: 8 checks passed
+exit=0

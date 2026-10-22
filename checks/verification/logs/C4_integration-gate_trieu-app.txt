@@ -1,0 +1,14 @@
+# 2026-10-22T16:48:46+07:00 c2/trieu-app@d96017c BASE_URL=http://localhost:3211 (adapter present, realm stideresearch)
+PASS GET /api/health live, no secret in body — tide=ready (tide-jwt-dpop-verifier), inference=not-configured (openai-responses), storage=ready persistent=false
+PASS POST /api/summarize, no identity — 401 rejected by verifier
+PASS POST /api/summarize, made-up bearer — 401 rejected by verifier
+PASS POST /api/summarize, forged unsigned JWT with all roles — 401 rejected by verifier
+PASS GET /api/records/rec-A, no identity (P02) — 401 rejected by verifier
+PASS GET /api/records/rec-B, forged JWT (P02) — 401 rejected by verifier
+PASS PUT /api/records/rec-gate, no identity (P01) — 401 rejected by verifier
+PASS PUT /api/records/rec-gate, forged JWT with _tide_encryptor (P01) — 401 rejected by verifier
+PASS GET /api/policies?recordId=rec-S, no identity — 401 rejected by verifier
+PASS POST /api/policies, forged JWT with tide-realm-admin — 401 rejected by verifier
+auth evidence: 9/9 protected calls answered 401 by the verifier; tide=ready
+integration-gate: 10 passed, 0 failed, 0 NOT_RUN
+exit=0

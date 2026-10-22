@@ -1,0 +1,11 @@
+{
+  "fixtureId": "A",
+  "synthetic": true,
+  "kind": "source-plaintext",
+  "recordId": "rec-A",
+  "marker": "A_ONLY_LANTERN_24",
+  "grantedTo": ["lan", "ai-reader"],
+  "title": "Lantern lab cohort — practical completion (SYNTHETIC)",
+  "facts": { "students": 24, "completed": 18, "completionRatePct": 75 },
+  "text": "SYNTHETIC TEST DATA, not real people. Dataset A (marker A_ONLY_LANTERN_24). Lantern lab cohort, autumn term: 24 students enrolled in the practical lab; 18 students completed every practical session; completion rate 75%. The 6 students who did not complete all missed the same two late sessions."
+}

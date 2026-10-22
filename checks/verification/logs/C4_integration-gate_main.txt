@@ -1,0 +1,14 @@
+# 2026-10-22T16:48:46+07:00 main@aa9fe00 BASE_URL=http://localhost:3210
+PASS GET /api/health live, no secret in body — tide=not-implemented (unconfigured-tide), inference=not-configured (not-implemented-inference), storage=ready persistent=false
+PASS POST /api/summarize, no identity — 503 fail-closed only (module not ready)
+PASS POST /api/summarize, made-up bearer — 503 fail-closed only (module not ready)
+PASS POST /api/summarize, forged unsigned JWT with all roles — 503 fail-closed only (module not ready)
+NOT_RUN GET /api/records/rec-A, no identity (P02) — 404: route absent in this build (not an authorization result)
+NOT_RUN GET /api/records/rec-B, forged JWT (P02) — 404: route absent in this build (not an authorization result)
+NOT_RUN PUT /api/records/rec-gate, no identity (P01) — 404: route absent in this build (not an authorization result)
+NOT_RUN PUT /api/records/rec-gate, forged JWT with _tide_encryptor (P01) — 404: route absent in this build (not an authorization result)
+NOT_RUN GET /api/policies?recordId=rec-S, no identity — 404: route absent in this build (not an authorization result)
+NOT_RUN POST /api/policies, forged JWT with tide-realm-admin — 404: route absent in this build (not an authorization result)
+auth evidence: 0/9 protected calls answered 401 by the verifier; tide=not-implemented
+integration-gate: 4 passed, 0 failed, 6 NOT_RUN
+exit=0

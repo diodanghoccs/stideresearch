@@ -1,0 +1,9 @@
+# 2026-10-22T16:48:46+07:00 c2/trieu-app@d96017c base-smoke (expected to FAIL once Tide is ready)
+PASS GET / renders STideResearch
+FAIL GET /api/health is live, Tide/AI readiness not faked: tide.state=ready
+FAIL POST /api/summarize fails closed with 503 INTEGRATION_NOT_READY: status 401
+FAIL POST /api/summarize with a made-up bearer token is not a bypass: status 401
+PASS GET /api/summarize is 405
+PASS no public record write route
+base-smoke: 3 FAILED
+exit=1
