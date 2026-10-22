@@ -220,7 +220,8 @@ function AiReaderStep() {
     const result = await apiJson<DraftBrief>(session, "summarize", "/api/summarize", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ sourceRecordId: REC.A, text: textA, runId: crypto.randomUUID() }),
+      // InferencePort contract (plan base §5, Tuấn's input.ts) names the source "A"; the Tide tag stays REC.A.
+      body: JSON.stringify({ sourceRecordId: "A", text: textA, runId: crypto.randomUUID() }),
     });
     setDraft({ kind: "done", result });
   }
