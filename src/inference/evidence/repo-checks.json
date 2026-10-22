@@ -1,0 +1,23 @@
+{
+  "recordedAt": "2026-10-22T09:25:27Z",
+  "baselineCommit": "aa9fe00",
+  "checks": [
+    { "command": "npm ci --no-audit --no-fund --fetch-retries=0 --fetch-timeout=15000", "status": "PASS", "note": "Pinned lockfile installed with network access outside the sandbox; no manifest or lockfile edits." },
+    { "command": "npm run typecheck", "status": "PASS" },
+    { "command": "npm run build", "status": "PASS", "note": "Production build outside the sandbox; sandbox build was blocked by EPERM creating .next directories." },
+    { "command": "npm run check:storage", "status": "PASS", "checks": 8 },
+    { "command": "BASE_URL=http://127.0.0.1:3218 node checks/base-smoke.mjs", "status": "PASS", "checks": 6, "note": "Production server and HTTP client outside the sandbox; sandbox loopback was blocked by EACCES." },
+    { "command": "git diff --check", "status": "PASS" }
+  ],
+  "productionHttpObservations": {
+    "page": 200,
+    "health": 200,
+    "summarizeWithoutCredentials": 503,
+    "summarizeWithInvalidBearer": 503,
+    "getSummarize": 405,
+    "publicRecordWriteRoutes": 404
+  },
+  "realTideAuthenticationVerified": false,
+  "realProviderInferenceVerified": false,
+  "limitation": "The current Tide verifier is unimplemented. HTTP 503 proves fail-closed behavior, not a live token/DPoP authorization decision."
+}
