@@ -1,0 +1,15 @@
+# 2026-10-22T17:09:12+07:00 main@911ee63
+
+> stideresearch@0.1.0 check:storage
+> node checks/storage-boundary.check.mts
+
+PASS readiness says in-memory and not persistent
+PASS rejects envelope with extra field "plaintext"
+PASS rejects envelope with extra field "text"
+PASS rejects envelope with extra field "content"
+PASS rejects envelope with extra field "privateKey"
+PASS rejects empty ciphertext / bad version / non-object
+PASS stores and returns only envelope fields
+PASS missing record is NOT_FOUND, not denied
+storage-boundary: 8 checks passed
+exit=0

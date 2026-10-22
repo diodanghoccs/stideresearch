@@ -10,6 +10,13 @@ Giờ Việt Nam (UTC+7). Log trong `checks/verification/logs/`. Không lưu tok
   - `c2/trieu-app@d96017c` (bản tích hợp, có adapter realm `stideresearch` trên máy Trí).
 - Node v24.15.0.
 
+**Chạy lại 22/10 ~17:10 trên `main@911ee63`** (đã gộp `d96017c` + `cb8ce55` + checks này), app ở `localhost:3000`, có adapter.
+- Kết quả: `fixture-contract` 4/4, `check:storage` 8/8, `integration-gate` 10 PASS (9/9 route trả 401, tide=ready). Log: `logs/R2_*_911ee63.txt`.
+- `cb8ce55` sửa `session-bridge.tsx`: `THRESHOLD_FAILURE` không kèm cause của contract giờ là `error/UPSTREAM_ERROR`, **không** còn bị tính là `denied`. Điều này khớp với quy tắc chấm B01/S04 bên dưới.
+- README @911ee63 **vẫn chưa sửa** C1–C5. E01 giữ FAIL.
+
+Bàn giao tiếp cho Triết: `docs/team-handoff/HANDOFF_TRIET_C2_1710.md`.
+
 | # | Case | Vai / thao tác | Kỳ vọng | Kết quả thật | Trạng thái | Bằng chứng | Owner nếu lỗi |
 |---|---|---|---|---|---|---|---|
 | 1 | F01 | `node checks/fixture-contract.check.mjs` | A/B tách biệt, marker riêng, số liệu đúng; S có 24/18/75%, không có dấu vết B | 4 passed, 0 failed trên cả 2 bản. Ca âm (src giả import B) → FAIL, exit 1 | **PASS** | `B2_fixture-contract_*.txt` | Triết |

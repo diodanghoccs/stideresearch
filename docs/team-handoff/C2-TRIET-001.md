@@ -45,7 +45,7 @@ Timeline v2 không mở F-B mới vì cửa sổ14:15 đã đóng và chưa có 
 
 ## Dev handoff — người triển khai điền
 
-*Cập nhật 22/10 16:50 (UTC+7).*
+*Cập nhật 22/10 16:50 (UTC+7). **17:10:** chạy lại trên `main@911ee63`, kết quả giữ nguyên (fixture 4/4, storage 8/8, gate 9/9 trả 401); bàn giao tiếp cho Triết: [`HANDOFF_TRIET_C2_1710.md`](HANDOFF_TRIET_C2_1710.md).*
 - **Người chạy:** trợ lý Claude theo yêu cầu của Trí, trên máy Trí. **Triết cần chạy lại độc lập** (`checks/RUNBOOK.md`) trước khi gửi B review.
 - **Phiên bản đã kiểm:**
   - `diodanghoccs/stideresearch` `main@aa9fe00` (base);
