@@ -1,0 +1,9 @@
+# 2026-10-22T16:48:46+07:00 main@aa9fe00 BASE_URL=http://localhost:3210
+PASS GET / renders STideResearch
+PASS GET /api/health is live, Tide/AI readiness not faked
+PASS POST /api/summarize fails closed with 503 INTEGRATION_NOT_READY
+PASS POST /api/summarize with a made-up bearer token is not a bypass
+PASS GET /api/summarize is 405
+PASS no public record write route
+base-smoke: all checks passed
+exit=0

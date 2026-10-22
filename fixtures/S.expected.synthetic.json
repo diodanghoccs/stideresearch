@@ -1,0 +1,13 @@
+{
+  "fixtureId": "S",
+  "synthetic": true,
+  "kind": "expected-plaintext",
+  "recordId": "rec-S",
+  "sourceRecordId": "rec-A",
+  "grantedTo": ["lan", "minh"],
+  "deniedTo": ["y", "ai-reader"],
+  "note": "Reference text to compare against the real AI draft and Lan's approved brief. NOT model output, NOT ciphertext. Never store it as an EncryptedRecord or use it to fake S.",
+  "requiredClaims": ["24", "18", "75%"],
+  "forbiddenMarkers": ["B_ONLY_COBALT_9", "Cobalt", "maintenance"],
+  "text": "Brief (synthetic): In the Lantern lab cohort, 18 of 24 enrolled students completed every practical session, a completion rate of 75%. The 6 non-completers all missed the same two late sessions, so rescheduling those sessions is the main lever."
+}
